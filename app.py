@@ -11,6 +11,10 @@ def display_map(location_data:pd.DataFrame):
     fig.update_layout(margin=dict(l=0, r=0, b=0, t=0),
                   width=1500, 
                   height=1200,
+                  hoverlabel=dict(
+                        bgcolor="white",
+                        font_size=16
+                    )
                   )
     return fig
 
@@ -51,11 +55,17 @@ option = st.selectbox(
     'Choose projects source:',
     ('All', 'Town Projects', 'MPW Projects', 'Town Stormwater', 'DHEC Permits'))
 
+frames = [town_projects, mpw_projects, dhec_permits, town_stormwater]
+all_frames = pd.concat(frames)
+
+text_search = st.text_input("Search projects by name", value="")
+m1 = all_frames["Name"].str.contains(text_search, na=False, case=False)
+m2 = all_frames["Desc"].str.contains(text_search, na=False, case=False)
+df_search = all_frames[m1 | m2]
+if text_search:
+    st.write(df_search)
+    
 if option == "All":
-    
-    frames = [town_projects, mpw_projects, dhec_permits, town_stormwater]
-    all_frames = pd.concat(frames)
-    
     #Display Map
     px_map = display_map(all_frames)
 
