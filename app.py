@@ -6,7 +6,6 @@ def display_map(location_data:pd.DataFrame):
 
     fig = px.scatter_mapbox(location_data, lat="latitude", lon="longitude", zoom=12, 
                             hover_name='Name', hover_data=['Desc'], center=dict(lat= 32.83, lon= -79.82))
-
     fig.update_layout(mapbox_style="open-street-map")
     fig.update_layout(margin=dict(l=0, r=0, b=0, t=0),
                   width=1500, 
@@ -16,6 +15,8 @@ def display_map(location_data:pd.DataFrame):
                         font_size=16
                     )
                   )
+    fig.update_traces(marker={'size': 12})
+    
     return fig
 
 
@@ -58,6 +59,7 @@ option = st.selectbox(
 frames = [town_projects, mpw_projects, dhec_permits, town_stormwater]
 all_frames = pd.concat(frames)
 
+#Search
 text_search = st.text_input("Search projects by name", value="")
 m1 = all_frames["Name"].str.contains(text_search, na=False, case=False)
 m2 = all_frames["Desc"].str.contains(text_search, na=False, case=False)
