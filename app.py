@@ -62,13 +62,18 @@ town_stormwater = pd.read_csv("https://nopian.github.io/govquery/stormwater.csv"
 #Use OpenDate
 town_stormwater.columns = ['Name', 'Desc', 'latitude', 'longitude']
 
+chs_projects = pd.read_csv("https://nopian.github.io/govquery/chs_newconstruction.csv",
+                           usecols=['PERMIT_ADDRESS_LINE1', 'DESCRIPTION', 'latitude', 'longitude'])
+#Use date
+chs_projects.columns = ['Desc', 'Name', 'latitude', 'longitude']
+
 
 #Choose Data
 option = st.selectbox(
     'Choose projects source:',
-    ('All', 'Town Projects', 'MPW Projects', 'Town Stormwater', 'DHEC Permits'))
+    ('All', 'Town Projects', 'MPW Projects', 'Town Stormwater', 'DHEC Permits', 'CHS New Construction'))
 
-frames = [town_projects, mpw_projects, dhec_permits, town_stormwater]
+frames = [town_projects, mpw_projects, dhec_permits, town_stormwater, chs_projects]
 all_frames = pd.concat(frames)
 
 #Search
@@ -102,3 +107,8 @@ if option == "DHEC Permits":
     
     #Display Map
     display_map(dhec_permits)
+    
+if option == "CHS New Construction":
+    
+    #Display Map
+    display_map(chs_projects)
