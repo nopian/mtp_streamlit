@@ -77,6 +77,7 @@ if option == "All":
     #Display Map
     display_map(all_frames)
 
+    
 if option == "Town Projects":
     
     #Display Map
