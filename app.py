@@ -8,11 +8,17 @@ def display_map(location_data:pd.DataFrame):
     m = folium.Map(location=[32.83, -79.82], zoom_start=12)
 
     for index, location_info in location_data.iterrows():
+        
+        if str(location_info["Desc"]).startswith("http"):
+            desc = f'<a href="{location_info["Desc"]}" target="_blank">{location_info["Desc"]}</a>'
+        else:
+            desc = location_info["Desc"]
+
         popup = folium.Popup(
             f"""
                   {location_info["Name"]}<br>
                   <br>
-                  {location_info["Desc"]}<br>
+                  {desc}<br>
                   """,
             max_width=500,
         )
