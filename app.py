@@ -81,11 +81,11 @@ dhec_permits.columns = ['latitude', 'longitude', 'Name', 'Desc', 'date', 'source
 ####
 ####
 town_stormwater = pd.read_csv("https://nopian.github.io/govquery/stormwater.csv",
-                              usecols=['ProjectName', 'URL', 'latitude', 'longitude', 'date'])
+                              usecols=['ProjectName', 'date', 'URL', 'latitude', 'longitude', ])
 
-town_stormwater['date'] = pd.to_datetime(town_stormwater['date'],format= '%Y-%m-%d')
+#town_stormwater['date'] = pd.to_datetime(town_stormwater['date'],format= '%Y-%m-%d')
 town_stormwater['source'] = "Town Stormwater"
-town_stormwater.columns = ['Name', 'Desc', 'latitude', 'longitude', 'date', 'source']
+town_stormwater.columns = ['Name', 'date', 'Desc', 'latitude', 'longitude', 'source']
 
 ####
 ####
@@ -100,7 +100,7 @@ chs_projects.columns = ['Desc', 'Name', 'latitude', 'longitude', 'date', 'source
 tab1, tab2, tab3 = st.tabs(["Map", "Last 7 Days", "Search"])
 
 with tab1:
-    st.subheader("Projects Map")
+    st.subheader("All Projects")
     #Choose Data
     option = st.selectbox(
         'Choose projects sources:',
@@ -146,18 +146,15 @@ with tab3:
         search_df = all_frames[mask]
         
         st.data_editor(search_df,hide_index=True, disabled=True, width=1800) 
-    #Search
-    #text_search = st.text_input("Search projects by name", value="")
-    #m1 = all_frames["Name"].str.contains(text_search, na=False, case=False)
-    #m2 = all_frames["Desc"].str.contains(text_search, na=False, case=False)
-    #df_search = all_frames[m1 | m2]
-    #if text_search:
-    #    st.table(df_search)
     
     
 with tab2:
     st.subheader("New Projects")
-    st.data_editor(all_frames[all_frames.date > pd.Timestamp.now() - pd.to_timedelta("7day")], hide_index=True, disabled=True, width=1800)
+    new_projects = all_frames[all_frames.date > pd.Timestamp.now() - pd.to_timedelta("7day")]
+    st.data_editor(new_projects, hide_index=True, disabled=True, width=1800)
+    
+    st.subheader("Map")
+    display_map(new_projects)
     
 
     
