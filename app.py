@@ -81,9 +81,9 @@ dhec_permits.columns = ['latitude', 'longitude', 'Name', 'Desc', 'date', 'source
 ####
 ####
 town_stormwater = pd.read_csv("https://nopian.github.io/govquery/stormwater.csv",
-                              usecols=['ProjectName', 'date', 'URL', 'latitude', 'longitude', ])
+                              usecols=['ProjectName', 'date', 'URL', 'latitude', 'longitude' ])
 
-#town_stormwater['date'] = pd.to_datetime(town_stormwater['date'],format= '%Y-%m-%d')
+town_stormwater['date'] = pd.to_datetime(town_stormwater['date'],format= '%Y-%m-%d')
 town_stormwater['source'] = "Town Stormwater"
 town_stormwater.columns = ['Name', 'date', 'Desc', 'latitude', 'longitude', 'source']
 
