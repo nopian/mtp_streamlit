@@ -32,8 +32,8 @@ date_range_filter = st.sidebar.date_input("Select Date Range", [df['Date'].min()
 filtered_df = df[df['Group'].isin(group_filter)]
 filtered_df = filtered_df[(filtered_df['Date'] >= pd.to_datetime(date_range_filter[0])) & (filtered_df['Date'] <= pd.to_datetime(date_range_filter[1]))]
 
-# Add month column
-filtered_df['Month'] = filtered_df['Date'].dt.to_period('M').astype(str)
+# Add month name column
+filtered_df['Month'] = filtered_df['Date'].dt.month_name()
 
 # Monthly Overview of Crime Counts
 st.subheader("Monthly Overview of Crime Counts")
@@ -97,7 +97,8 @@ month_counts = filtered_df.groupby(['Month', 'Group']).size().unstack(fill_value
 st.subheader("Crime Distribution by Month")
 fig_month = px.bar(month_counts.reset_index().melt(id_vars='Month', var_name='Group', value_name='Count'), 
                    x='Month', y='Count', color='Group', barmode='stack',
-                   labels={'Month': 'Month', 'Count': 'Crime Count'}, title='Crime Distribution by Month')
+                   labels={'Month': 'Month', 'Count': 'Crime Count'}, title='Crime Distribution by Month',
+                   category_orders={"Month": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]})
 st.plotly_chart(fig_month, use_container_width=True)
 
 # Top Crime Locations
