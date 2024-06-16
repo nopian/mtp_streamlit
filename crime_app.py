@@ -99,10 +99,6 @@ crime_summary = df['Group'].value_counts().reset_index()
 crime_summary.columns = ['Crime Type', 'Count']
 st.write(crime_summary)
 
-# Show data as table
-st.subheader("Data Table")
-st.dataframe(group_counts)
-
 st.subheader("View Data")
 edited_df = st.dataframe(df)
 
