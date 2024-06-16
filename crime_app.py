@@ -32,8 +32,8 @@ date_range_filter = st.sidebar.date_input("Select Date Range", [df['Date'].min()
 filtered_df = df[df['Group'].isin(group_filter)]
 filtered_df = filtered_df[(filtered_df['Date'] >= pd.to_datetime(date_range_filter[0])) & (filtered_df['Date'] <= pd.to_datetime(date_range_filter[1]))]
 
-# Add week of the year column
-filtered_df['WeekOfYear'] = filtered_df['Date'].dt.isocalendar().week
+# Add month column
+filtered_df['Month'] = filtered_df['Date'].dt.to_period('M')
 
 # Monthly Overview of Crime Counts
 st.subheader("Monthly Overview of Crime Counts")
@@ -91,14 +91,14 @@ fig_hour = px.bar(hour_counts.reset_index().melt(id_vars='Hour', var_name='Group
                   labels={'Hour': 'Hour of Day', 'Count': 'Crime Count'}, title='Crime Distribution by Hour')
 st.plotly_chart(fig_hour, use_container_width=True)
 
-# Crime Distribution by Week of the Year
-week_of_year_counts = filtered_df.groupby(['WeekOfYear', 'Group']).size().unstack(fill_value=0)
+# Crime Distribution by Month
+month_counts = filtered_df.groupby(['Month', 'Group']).size().unstack(fill_value=0)
 
-st.subheader("Crime Distribution by Week of the Year")
-fig_week = px.bar(week_of_year_counts.reset_index().melt(id_vars='WeekOfYear', var_name='Group', value_name='Count'), 
-                  x='WeekOfYear', y='Count', color='Group', barmode='stack',
-                  labels={'WeekOfYear': 'Week of Year', 'Count': 'Crime Count'}, title='Crime Distribution by Week of the Year')
-st.plotly_chart(fig_week, use_container_width=True)
+st.subheader("Crime Distribution by Month")
+fig_month = px.bar(month_counts.reset_index().melt(id_vars='Month', var_name='Group', value_name='Count'), 
+                   x='Month', y='Count', color='Group', barmode='stack',
+                   labels={'Month': 'Month', 'Count': 'Crime Count'}, title='Crime Distribution by Month')
+st.plotly_chart(fig_month, use_container_width=True)
 
 # Top Crime Locations
 top_locations = filtered_df['Location'].value_counts().head(10).reset_index()
