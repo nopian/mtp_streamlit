@@ -33,7 +33,7 @@ filtered_df = df[df['Group'].isin(group_filter)]
 filtered_df = filtered_df[(filtered_df['Date'] >= pd.to_datetime(date_range_filter[0])) & (filtered_df['Date'] <= pd.to_datetime(date_range_filter[1]))]
 
 # Add month column
-filtered_df['Month'] = filtered_df['Date'].dt.to_period('M')
+filtered_df['Month'] = filtered_df['Date'].dt.to_period('M').astype(str)
 
 # Monthly Overview of Crime Counts
 st.subheader("Monthly Overview of Crime Counts")
