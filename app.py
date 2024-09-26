@@ -97,7 +97,7 @@ chs_projects['source'] = "CHS Permits"
 chs_projects.columns = ['Desc', 'Name', 'latitude', 'longitude', 'date', 'source']
 
 
-tab1, tab2, tab3 = st.tabs(["Map", "Last 7 Days", "Search"])
+tab1, tab2, tab3 = st.tabs(["Map", "Last 30 Days", "Search"])
 
 with tab1:
     st.subheader("All Projects")
@@ -145,13 +145,13 @@ with tab3:
         mask = all_frames.applymap(lambda x: query in str(x).lower()).any(axis=1)
         search_df = all_frames[mask]
         
-        st.data_editor(search_df,hide_index=True, disabled=True, width=1800) 
+        st.table(search_df) 
     
     
 with tab2:
     st.subheader("New Projects")
-    new_projects = all_frames[all_frames.date > pd.Timestamp.now() - pd.to_timedelta("7day")]
-    st.data_editor(new_projects, hide_index=True, disabled=True, width=1800)
+    new_projects = all_frames[all_frames.date > pd.Timestamp.now() - pd.to_timedelta("30day")]
+    st.table(new_projects)
     
     st.subheader("Map")
     display_map(new_projects)
